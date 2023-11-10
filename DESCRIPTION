@@ -1,0 +1,16 @@
+Package: ZhangRtools
+Title: Functions created by ZhangYC, 我建的一些函数
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Zhang", 
+    family = "Yongcaho", 
+    email = "zhangyongchao@nibs.ac.cn", 
+    role = c("aut", "cre"),
+    comment = c(Github = "https://github.com/fentouxungui"))
+Description: Functions created by ZhangYC, 我构建的一些函数.
+License: GPL (>= 2)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Depends: 
+    R (>= 3.5.0)
