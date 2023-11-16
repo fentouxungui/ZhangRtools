@@ -2,4 +2,5 @@
 
 export(BatchModifyFile)
 export(ModifyFile)
+export(check_hgnc_hits)
 import(utils)
