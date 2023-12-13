@@ -1,6 +1,7 @@
 #' 对于重复行的各列，分别进行字符串拼接
 #' @description
 #'  以字符串转表达式方式，实现数据分组以及各列数据的字符串拼接。只能基于一列进行分组，对重复数据的其他列进行操作。
+#'  主要是简少了dplyr中的summarise function对于多列数据执行同一操作的代码量。
 #'  参考[Paste values in a data frame based on duplicated values in other columns in R](https://stackoverflow.com/questions/51579405/paste-values-in-a-data-frame-based-on-duplicated-values-in-other-columns-in-r)
 #'  注意，此函数目前只能对各列执行同一操作！不能对不同列执行不同的function。
 #'
