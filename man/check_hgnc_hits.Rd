@@ -10,7 +10,7 @@ check_hgnc_hits(hgnc.hits)
 \item{hgnc.hits}{HGNC在线工具'Multi-symbol checker'的结果, A data.frame}
 }
 \value{
-A data.frame
+A data.frame for UniqueHit or A list with two data.frame for UniqueHit and MultiHit
 }
 \description{
 HGNC 提供的\href{https://www.genenames.org/tools/multi-symbol-checker/}{Multi-symbol checker在线工具}可以将基因名更新到最新,

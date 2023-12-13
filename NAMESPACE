@@ -2,5 +2,6 @@
 
 export(BatchModifyFile)
 export(ModifyFile)
+export(aggregate_df)
 export(check_hgnc_hits)
 import(utils)
