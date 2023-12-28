@@ -8,7 +8,7 @@
 #' @return A data.frame for UniqueHit or A list with two data.frame for UniqueHit and MultiHit
 #' @export
 
-check_hgnc_hits <- function(hgnc.hits){ # check the multi-hits from HNGC gene symbol mapping results
+Check_hgnc_hits <- function(hgnc.hits){ # check the multi-hits from HNGC gene symbol mapping results
   # HGNC数据库中ID和Approved.symbol都是唯一的
   # 检查一下input是否有重复值
   if (any(duplicated(paste0(hgnc.hits$Input, hgnc.hits$HGNC.ID)))) {

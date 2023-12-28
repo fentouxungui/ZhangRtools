@@ -22,7 +22,7 @@
 #'                          1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L), stringsAsFactors = FALSE)
 #' dt
 #'
-#' aggregate_df(df = dt, id = colnames(dt)[1], columns = colnames(dt)[2:3])
+#' Aggregate_df(df = dt, id = colnames(dt)[1], columns = colnames(dt)[2:3])
 #' # 基于两列进行重复值处理
 #' # library(dplyr)
 #' # dt %>% group_by(variable, value) %>%
@@ -30,7 +30,7 @@
 #' #  as.data.frame()
 #'
 #'
-aggregate_df <- function(df, id, columns){
+Aggregate_df <- function(df, id, columns){
   if (is.data.frame(df)) {
     if (all(c(id, columns) %in% colnames(df))) {
       require(dplyr)
