@@ -11,25 +11,27 @@
 #'
 #' @examples
 #' # top_genes(SeuratObj = obj, expr.cut = 0.01)
-top_genes <- function(SeuratObj, expr.cut = 0.01){
+top_genes <- function (SeuratObj, expr.cut = 0.01) {
   require(parallel)
   require(dplyr)
   require(Seurat)
-  if (grepl("^5", SeuratObj@version)) { # 对于seurat v5 对象，先要join layers.
+  if (grepl("^5", SeuratObj@version)) {
     SeuratObj <- JoinLayers(SeuratObj)
-    counts.expr <- SeuratObj@assays$RNA@layers$counts
-  }else{
-    counts.expr <- SeuratObj@assays$RNA$counts
+    counts.expr <- as.matrix(SeuratObj@assays$RNA@layers$counts)
+  } else {
+    counts.expr <- as.matrix(SeuratObj@assays$RNA$counts)
   }
-  top.list <- mclapply(1:ncol(SeuratObj), function(x){
-    values <- sort(as.matrix(counts.expr)[,x],decreasing = TRUE)
+  colnames(counts.expr) <- colnames(SeuratObj)
+  rownames(counts.expr) <- rownames(SeuratObj)
+  top.list <- mclapply(1:ncol(SeuratObj), function(x) {
+    values <- sort(counts.expr[, x], decreasing = TRUE)
     rates <- values/sum(values)
     top <- values[rates > 0.01]
     data.frame(Gene = names(top), Expr = unname(top))
   }, mc.cores = detectCores())
   top.df <- Reduce(rbind, top.list)
-  group_by(top.df, Gene) %>%
-    summarise(mean = mean(Expr), median = median(Expr), Cells = length(Expr)) -> top.statics
-  return(top.statics)
+  top.statics <- group_by(top.df, Gene) %>%
+    summarise(mean = mean(Expr), median = median(Expr), Cells = length(Expr))
+  return(as.data.frame(top.statics))
 }
 
