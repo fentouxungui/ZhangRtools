@@ -17,4 +17,7 @@ Depends:
 Imports: 
     dplyr,
     ggplot2
+Suggests:
+    Seurat,
+    parallel
 
