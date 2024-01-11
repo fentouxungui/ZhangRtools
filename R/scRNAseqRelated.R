@@ -15,8 +15,14 @@ top_genes <- function(SeuratObj, expr.cut = 0.01){
   require(parallel)
   require(dplyr)
   require(Seurat)
+  if (grepl("^5", SeuratObj@version)) { # 对于seurat v5 对象，先要join layers.
+    SeuratObj <- JoinLayers(SeuratObj)
+    counts.expr <- SeuratObj@assays$RNA@layers$counts
+  }else{
+    counts.expr <- SeuratObj@assays$RNA$counts
+  }
   top.list <- mclapply(1:ncol(SeuratObj), function(x){
-    values <- sort(SeuratObj@assays$RNA@counts[,x],decreasing = TRUE)
+    values <- sort(as.matrix(counts.expr)[,x],decreasing = TRUE)
     rates <- values/sum(values)
     top <- values[rates > 0.01]
     data.frame(Gene = names(top), Expr = unname(top))
