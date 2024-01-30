@@ -2,36 +2,35 @@
 % Please edit documentation in R/DataFrameRelated.R
 \name{Aggregate_df}
 \alias{Aggregate_df}
-\title{对于重复行的各列，分别进行字符串拼接}
+\title{基于某列的重复值，对其他所有行进行字符串拼接【压缩行】}
 \usage{
-Aggregate_df(df, id, columns)
+Aggregate_df(df, id)
 }
 \arguments{
 \item{df}{A data.frame}
 
-\item{id}{用于分组的列}
-
-\item{columns}{需要被处理的列，对于同一组的数据，对于各列进行字符串的拼接，使用“; ”进行分隔}
+\item{id}{用于分组的列（有重复值的列）}
 }
 \value{
 A data.frame
 }
 \description{
-以字符串转表达式方式，实现数据分组以及各列数据的字符串拼接。只能基于一列进行分组，对重复数据的其他列进行操作。
+以字符串转表达式方式，实现数据分组以及各列数据的字符串拼接。只能基于一列进行分组，对重复数据的其他列进行字符串的拼接，使用“; ”进行分隔。
 主要是简少了dplyr中的summarise function对于多列数据执行同一操作的代码量。
 参考\href{https://stackoverflow.com/questions/51579405/paste-values-in-a-data-frame-based-on-duplicated-values-in-other-columns-in-r}{Paste values in a data frame based on duplicated values in other columns in R}
 注意，此函数目前只能对各列执行同一操作！不能对不同列执行不同的function。
 }
 \examples{
 dt <- data.frame(genotype = c("X1", "X2", "X3", "X4", "X5", "X6", "X7",  "X8", "X1", "X2", "X3",
-                              "X4","X5", "X6", "X7",  "X8", "X1", "X2", "X3", "X4", "X5", "X6", "X7",  "X8"),
+                              "X4","X5", "X6", "X7",  "X8", "X1", "X2", "X3", "X4", "X5", "X6",
+                              "X7",  "X8"),
                   variable = c("A", "A", "A", "A", "A", "A", "A", "A", "B", "B", "B", "B",
                               "B", "B", "B", "B", "C", "C", "C", "C", "C", "C", "C", "C"),
                   value = c(1L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 1L, 2L, 3L, 3L,  3L, 4L, 5L, 5L,
                          1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L), stringsAsFactors = FALSE)
 dt
 
-Aggregate_df(df = dt, id = colnames(dt)[1], columns = colnames(dt)[2:3])
+Aggregate_df(df = dt, id = colnames(dt)[1])
 # 基于两列进行重复值处理
 # library(dplyr)
 # dt \%>\% group_by(variable, value) \%>\%

@@ -45,9 +45,10 @@ a ggplot2 plot
 David富集结果绘图 气泡图
 }
 \examples{
-require(dplyr)
-require(ggplot2)
-df <- read.delim(system.file("extdata", "David_outputs_KEGG.txt", package = "ZhangRtools"), stringsAsFactors = FALSE)
+requireNamespace("dplyr")
+requireNamespace("ggplot2")
+df <- read.delim(system.file("extdata", "David_outputs_KEGG.txt",
+package = "ZhangRtools"), stringsAsFactors = FALSE)
 David_dotplot(df)
 David_dotplot(df, arrange.by.x = TRUE)
 }

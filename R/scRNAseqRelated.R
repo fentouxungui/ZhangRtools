@@ -12,9 +12,9 @@
 #' @examples
 #' # top_genes(SeuratObj = obj, expr.cut = 0.01)
 top_genes <- function (SeuratObj, expr.cut = 0.01) {
-  require(parallel)
-  require(dplyr)
-  require(Seurat)
+  requireNamespace("parallel")
+  requireNamespace("dplyr")
+  requireNamespace("Seurat")
   if (grepl("^5", SeuratObj@version)) {
     SeuratObj <- JoinLayers(SeuratObj)
     counts.expr <- as.matrix(SeuratObj@assays$RNA@layers$counts)

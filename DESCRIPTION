@@ -8,16 +8,19 @@ Authors@R:
     role = c("aut", "cre"),
     comment = c(Github = "https://github.com/fentouxungui"))
 Description: Functions created by ZhangYC, 我构建的一些函数.
-License: GPL (>= 2)
+License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Depends: 
     R (>= 3.5.0)
 Imports: 
+    magrittr,
+    stats,
     dplyr,
     ggplot2
 Suggests:
     Seurat,
-    parallel
-
+    parallel,
+    roxygen2,
+    devtools

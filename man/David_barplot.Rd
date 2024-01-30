@@ -39,12 +39,18 @@ a ggplot2 plot
 David富集结果绘图 柱状图
 }
 \examples{
-require(dplyr)
-require(ggplot2)
-df <- read.delim(system.file("extdata", "David_outputs_GO.txt", package = "ZhangRtools"), stringsAsFactors = FALSE)
-David_barplot(df, fill.color = c("#ff9999","#ff0000"),x = "Fold.Enrichment", xlabel = "Fold Enrichment")
-David_barplot(df, x = "Fold.Enrichment", xlabel = "Fold Enrichment", arrange.by.x = TRUE)
-df \%>\% mutate(fdr = -log(FDR, base=10)) \%>\% David_barplot(x = "fdr", xlabel = "-log(10)FDR")
-kegg.res <- read.delim(system.file("extdata", "David_outputs_KEGG.txt", package = "ZhangRtools"), stringsAsFactors = FALSE)
-David_barplot(df = kegg.res,  fill.color = c("#ff9999","#ff0000"), x = "Fold.Enrichment", xlabel = "Fold Enrichment")
+requireNamespace("dplyr")
+requireNamespace("ggplot2")
+df <- read.delim(system.file("extdata", "David_outputs_GO.txt",
+package = "ZhangRtools"), stringsAsFactors = FALSE)
+David_barplot(df, fill.color = c("#ff9999","#ff0000"),x = "Fold.Enrichment",
+ xlabel = "Fold Enrichment")
+David_barplot(df, x = "Fold.Enrichment", xlabel = "Fold Enrichment",
+arrange.by.x = TRUE)
+df \%>\% dplyr::mutate(fdr = -log(FDR, base=10)) \%>\% David_barplot(x = "fdr",
+xlabel = "-log(10)FDR")
+kegg.res <- read.delim(system.file("extdata", "David_outputs_KEGG.txt",
+package = "ZhangRtools"), stringsAsFactors = FALSE)
+David_barplot(df = kegg.res,  fill.color = c("#ff9999","#ff0000"),
+x = "Fold.Enrichment", xlabel = "Fold Enrichment")
 }

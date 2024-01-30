@@ -1,7 +1,8 @@
 #' @title 修正HGNC的Multi-symbol checker工具的输出结果
 #' @description
 #'  HGNC 提供的[Multi-symbol checker在线工具](https://www.genenames.org/tools/multi-symbol-checker/)可以将基因名更新到最新,
-#'  但是会输出所有匹配的结果,也就是说单个input gene可能会有多个hits.此工具可保留主要匹配结果,去除可能的错误hits以及未必对上的input.
+#'  但是会输出所有匹配的结果,也就是说单个input gene可能会有多个hits.此工具可保
+#'  留主要匹配结果,去除可能的错误hits以及未必对上的input.
 #'
 #' @param hgnc.hits HGNC在线工具'Multi-symbol checker'的结果, A data.frame
 #'

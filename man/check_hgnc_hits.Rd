@@ -14,5 +14,6 @@ A data.frame for UniqueHit or A list with two data.frame for UniqueHit and Multi
 }
 \description{
 HGNC 提供的\href{https://www.genenames.org/tools/multi-symbol-checker/}{Multi-symbol checker在线工具}可以将基因名更新到最新,
-但是会输出所有匹配的结果,也就是说单个input gene可能会有多个hits.此工具可保留主要匹配结果,去除可能的错误hits以及未必对上的input.
+但是会输出所有匹配的结果,也就是说单个input gene可能会有多个hits.此工具可保
+留主要匹配结果,去除可能的错误hits以及未必对上的input.
 }

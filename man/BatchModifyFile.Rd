@@ -24,7 +24,8 @@ BatchModifyFile(
 
 \item{LineMatchKeyWords}{用于寻找要被修改的行,一个关键词向量}
 
-\item{LineMatch.ignore.case}{依据关键词寻找要被修改的行时,是否需要忽略行关键词的大小写,一个逻辑值}
+\item{LineMatch.ignore.case}{依据关键词寻找要被修改的行时,是否需要忽略行关键
+词的大小写,一个逻辑值}
 
 \item{WordOld}{要被替换的词,一个字符串}
 

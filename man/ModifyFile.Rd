@@ -22,11 +22,13 @@ ModifyFile(
 
 \item{LineMatchKeyWords}{用于寻找要被修改的行,一个关键词向量}
 
-\item{LineMatch.ignore.case}{依据关键词寻找要被修改的行时,是否需要忽略行关键词的大小写,一个逻辑值}
+\item{LineMatch.ignore.case}{依据关键词寻找要被修改的行时,是否需要忽略行
+关键词的大小写,一个逻辑值}
 
 \item{WordOld}{要被替换的词,一个字符串}
 
-\item{wordold.Matchfixed}{匹配要被替换的词时,是否需要设置为不使用正则表达式,一个逻辑值}
+\item{wordold.Matchfixed}{匹配要被替换的词时,是否需要设置为不使用正则表达式,
+一个逻辑值}
 
 \item{WordNew}{新词,一个字符串}
 
@@ -46,7 +48,8 @@ A data.frame of 匹配和替换信息 or Nothing
 }
 \examples{
 # Not Run
-# ModifyFile(file = "./scRNAseq/Fly/Ovary/Fly-Ovary-Jevitt-PlosBiology-2020/Parameters.R",
+# ModifyFile(file = "./scRNAseq/Fly/Ovary/Fly-Ovary-Jevitt-PlosBiology-2020/
+# Parameters.R",
 # LineMatchKeyWords = c("SplitBy.levels.max","15"),
 # LineMatch.ignore.case = FALSE,
 # WordOld = "SplitBy.levels.max <- 15",

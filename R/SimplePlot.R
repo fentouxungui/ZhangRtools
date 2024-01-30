@@ -12,15 +12,23 @@
 #' @return a ggplot2 plot
 #' @export
 #'
+#' @import ggplot2
+#'
 #' @examples
-#' require(dplyr)
-#' require(ggplot2)
-#' df <- read.delim(system.file("extdata", "David_outputs_GO.txt", package = "ZhangRtools"), stringsAsFactors = FALSE)
-#' David_barplot(df, fill.color = c("#ff9999","#ff0000"),x = "Fold.Enrichment", xlabel = "Fold Enrichment")
-#' David_barplot(df, x = "Fold.Enrichment", xlabel = "Fold Enrichment", arrange.by.x = TRUE)
-#' df %>% mutate(fdr = -log(FDR, base=10)) %>% David_barplot(x = "fdr", xlabel = "-log(10)FDR")
-#' kegg.res <- read.delim(system.file("extdata", "David_outputs_KEGG.txt", package = "ZhangRtools"), stringsAsFactors = FALSE)
-#' David_barplot(df = kegg.res,  fill.color = c("#ff9999","#ff0000"), x = "Fold.Enrichment", xlabel = "Fold Enrichment")
+#' requireNamespace("dplyr")
+#' requireNamespace("ggplot2")
+#' df <- read.delim(system.file("extdata", "David_outputs_GO.txt",
+#' package = "ZhangRtools"), stringsAsFactors = FALSE)
+#' David_barplot(df, fill.color = c("#ff9999","#ff0000"),x = "Fold.Enrichment",
+#'  xlabel = "Fold Enrichment")
+#' David_barplot(df, x = "Fold.Enrichment", xlabel = "Fold Enrichment",
+#' arrange.by.x = TRUE)
+#' df %>% dplyr::mutate(fdr = -log(FDR, base=10)) %>% David_barplot(x = "fdr",
+#' xlabel = "-log(10)FDR")
+#' kegg.res <- read.delim(system.file("extdata", "David_outputs_KEGG.txt",
+#' package = "ZhangRtools"), stringsAsFactors = FALSE)
+#' David_barplot(df = kegg.res,  fill.color = c("#ff9999","#ff0000"),
+#' x = "Fold.Enrichment", xlabel = "Fold Enrichment")
 David_barplot <- function(df,
                           term.prefix = c("(^GO:\\d+~)|(^\\w+\\d+[:~])"),
                           fill.color = c("blue","red"),
@@ -29,7 +37,7 @@ David_barplot <- function(df,
                           xlabel = "Gene Counts",
                           arrange.by.x = FALSE,
                           decresing = TRUE){
-  #require(ggplot2)
+  requireNamespace("ggplot2")
   # 去除Term的前缀
   df$TermShort <- gsub(term.prefix,"",df$Term)
   # 1. 过滤和排序，仅保留前多少个
@@ -79,11 +87,13 @@ David_barplot <- function(df,
 #'
 #' @return a ggplot2 plot
 #' @export
+#' @import ggplot2
 #'
 #' @examples
-#' require(dplyr)
-#' require(ggplot2)
-#' df <- read.delim(system.file("extdata", "David_outputs_KEGG.txt", package = "ZhangRtools"), stringsAsFactors = FALSE)
+#' requireNamespace("dplyr")
+#' requireNamespace("ggplot2")
+#' df <- read.delim(system.file("extdata", "David_outputs_KEGG.txt",
+#' package = "ZhangRtools"), stringsAsFactors = FALSE)
 #' David_dotplot(df)
 #' David_dotplot(df, arrange.by.x = TRUE)
 David_dotplot <- function(df,
@@ -96,7 +106,7 @@ David_dotplot <- function(df,
                           size.label = "Gene number",
                           arrange.by.x = FALSE,
                           decresing = TRUE){
-  #require(ggplot2)
+  requireNamespace("ggplot2")
   # 去除Term的前缀
   df$TermShort <- gsub(term.prefix,"",df$Term)
   # 1. 过滤和排序，仅保留前多少个
@@ -113,7 +123,7 @@ David_dotplot <- function(df,
   df <- df[,c("TermShort", "PValue", x, pt.size)]
   colnames(df) <- c("term", "PValue", "xvalue", "size")
   df$term <- factor(df$term,levels = rev(df$term))
-  ggplot2::ggplot(df, aes(x = term, y = xvalue)) +
+  ggplot(df, aes(x = term, y = xvalue)) +
     geom_point(aes(size = size, color = -1*log10(PValue))) +
     coord_flip() +
     scale_colour_gradient(low=fill.color[1], high = fill.color[2])+
