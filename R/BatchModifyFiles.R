@@ -44,6 +44,7 @@ BatchModifyFile <- function(Directory,
                             SaveOld = TRUE){
   # 检查Directory是否存在
   if ( !dir.exists(Directory)) {
+    # 中文消息可能在check时，提示警告non-ASCII characters， 这个忽略就可以，因为几乎所有电脑都支持non-ASCII characters。
     stop("错误,目录不存在!")
   }
   # 寻找包含关键词的所有文件

@@ -2,7 +2,7 @@
 % Please edit documentation in R/DataFrameRelated.R
 \name{Aggregate_df}
 \alias{Aggregate_df}
-\title{基于某列的重复值，对其他所有行进行字符串拼接【压缩行】}
+\title{合并某列的重复值，对其他所有行进行字符串拼接【压缩行】}
 \usage{
 Aggregate_df(df, id)
 }
