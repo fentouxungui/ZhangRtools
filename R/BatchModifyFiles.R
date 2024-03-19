@@ -2,6 +2,8 @@
 #' @description
 #'  以逐行读取的形式,对目标文件中的内容进行文字替换。
 #'
+#' @family Modify Files
+#'
 #' @param Directory 文件夹,待查文件的检索范围,一个字符串
 #' @param FileNamePattern 待查文件的文件名,使用正则表达式进行匹配,一个字符串
 #' @param LineMatchKeyWords 用于寻找要被修改的行,一个关键词向量
@@ -78,6 +80,8 @@ BatchModifyFile <- function(Directory,
 #' @title 修改单个文件里的内容
 #' @description
 #' 以逐行读取方式,对文件里的内容进行内容匹配和替换。
+#'
+#' @family Modify Files
 #'
 #' @param file 要被修改的文件,一个路径字符串
 #' @param LineMatchKeyWords 用于寻找要被修改的行,一个关键词向量

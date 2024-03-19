@@ -22,3 +22,8 @@ A data.frame with more rows
 \examples{
 #NULL
 }
+\seealso{
+Other Data Frame Related: 
+\code{\link{Aggregate_df}()}
+}
+\concept{Data Frame Related}

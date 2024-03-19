@@ -39,3 +39,8 @@ Aggregate_df(df = dt, id = colnames(dt)[1])
 
 
 }
+\seealso{
+Other Data Frame Related: 
+\code{\link{Expand_df}()}
+}
+\concept{Data Frame Related}

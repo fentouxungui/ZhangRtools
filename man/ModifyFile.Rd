@@ -62,3 +62,8 @@ A data.frame of 匹配和替换信息 or Nothing
 # )
 
 }
+\seealso{
+Other Modify Files: 
+\code{\link{BatchModifyFile}()}
+}
+\concept{Modify Files}

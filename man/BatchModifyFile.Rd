@@ -55,3 +55,8 @@ csv文件,包含各个文件的匹配和替换信息
 # SaveOld = TRUE)
 
 }
+\seealso{
+Other Modify Files: 
+\code{\link{ModifyFile}()}
+}
+\concept{Modify Files}

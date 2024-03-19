@@ -5,6 +5,7 @@
 #'  参考[Paste values in a data frame based on duplicated values in other columns in R](https://stackoverflow.com/questions/51579405/paste-values-in-a-data-frame-based-on-duplicated-values-in-other-columns-in-r)
 #'  注意，此函数目前只能对各列执行同一操作！不能对不同列执行不同的function。
 #'
+#' @family Data Frame Related
 #'
 #' @param df A data.frame
 #' @param id 用于分组的列（有重复值的列）
@@ -52,6 +53,8 @@ Aggregate_df <- function(df, id){
 #' 对某列进行字符串切割，复制其他所有行【扩展行】
 #' @description
 #'  以字符串转表达式方式，实现某列字符串数据切割和行扩展。只能基于一列进行字符串切割。
+#'
+#' @family Data Frame Related
 #'
 #' @param df A data.frame
 #' @param id 用于字符换切割的列
