@@ -1,5 +1,5 @@
 Package: ZhangRtools
-Title: Functions created by ZhangYC, 我建的一些函数
+Title: Functions created by ZhangYC
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Zhang", 
@@ -7,7 +7,7 @@ Authors@R:
     email = "zhangyongchao@nibs.ac.cn", 
     role = c("aut", "cre"),
     comment = c(Github = "https://github.com/fentouxungui"))
-Description: Functions created by ZhangYC, 我构建的一些函数.
+Description: Functions created by ZhangYC
 License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

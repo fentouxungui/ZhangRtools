@@ -2,7 +2,7 @@
 % Please edit documentation in R/DataFrameRelated.R
 \name{Expand_df}
 \alias{Expand_df}
-\title{对某列进行字符串切割，复制其他所有行【扩展行】}
+\title{对某列进行字符串切割，复制其他所有行 - 扩展行}
 \usage{
 Expand_df(df, id, splitby = "/")
 }
