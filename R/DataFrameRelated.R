@@ -118,8 +118,6 @@ update_IDs <- function(old, db = ADataframe, from = NULL, to = NULL, split = NUL
   return(unname(res))
 }
 
-
-
 #' 基于多个关键词更新数据框
 #' @description
 #' 依据数据库信息，和至多3种ID，更新数据。返回1个list，包含两个数据框，第一个matched：更新后的数据框，第二个lost，不能被识别的行。
@@ -198,6 +196,110 @@ mapping_update <- function(inputDF, db = ADataframe, by.input = NULL, by.db = NU
         if(verbose){print(lost.lost.mapped[,c(by.input, by.input.2, by.input.3)])}
         lost.lost.mapped[,by.input] <- db.3[,by.db][match(lost.lost.mapped[,by.input.3], db.3[,by.db.3])] # 修改第一个关键词
         # lost.lost.mapped[,by.input.2] <- db.3[,by.db.2][match(lost.lost.mapped[,by.input.3], db.3[,by.db.3])] # 修改第二个关键词
+        if(verbose){message("替换后：")}
+        if(verbose){print(lost.lost.mapped[,c(by.input, by.input.2, by.input.3)])}
+        if(any(lost.lost.mapped[,by.input] %in% mapped[,by.input])){
+          message("注意：以下条目与第一次匹配到的条目有重复。")
+          print(lost.lost.mapped[lost.lost.mapped[,by.input] %in% mapped[,by.input],c(by.input, by.input.2, by.input.3)])
+        }
+        if(any(lost.lost.mapped[,by.input] %in% lost.mapped[,by.input])){
+          message("注意：以下条目与第二次匹配到的条目有重复。")
+          print(lost.lost.mapped[lost.lost.mapped[,by.input] %in% lost.mapped[,by.input],c(by.input, by.input.2, by.input.3)])
+        }
+      }
+      lost.lost.lost <- lost.lost[!lost.lost[,by.input.3] %in% db.3[,by.db.3],]
+      message(paste0(nrow(lost.lost.lost),"行未被对应上。"))
+      matched = list(mapped, lost.mapped, lost.lost.mapped)
+      matched <- matched[c(TRUE, nrow(lost.mapped) > 0, nrow(lost.lost.mapped) > 0)]
+      matched <- Reduce(rbind, matched)
+      return(list(matched = matched, lost = lost.lost.lost))
+    }
+  }
+}
+
+
+#' 基于多个关键词合并两个数据
+#' @description
+#' 与mapping_update的区别，mapping_join不会修改原来的数据，只是在原来数据的基础上，添加新数据到新的列中。
+#' 依据多对关键词，合并两个数据。返回1个list，包含两个数据框，第一个matched：合并后的数据框，第二个lost，不能被识别的行。
+#' 注意：该函数的第一个关键词，即by.input列，应为绝大多数能被匹配上的。关键词可以重复使用，每次的关键词对不同即可。另外，该函数在后两轮匹配时，会输出重复匹配的条目。
+#' 关键词匹配是有优先顺序的，第一次被匹配上了，后续就不会再去做匹配。
+#'
+#' @param inputDF 原数据框
+#' @param db 要被加进来的数据
+#' @param by.input 原数据框里的第一识别列（也是要被更新的列）
+#' @param by.db 新数据框里的第一识别列的对应列
+#' @param by.input.2 原数据框里的第二识别列，当第一识别列不能被识别时才启用（不会被更新），可以为NULL
+#' @param by.db.2 新数据框里的第二识别列的对应列，可以为NULL
+#' @param by.input.3 原数据框里的第三识别列，当第一和第二识别列均不能被识别时才启用（不会被更新），可以为NULL
+#' @param by.db.3 新数据框里的第三识别列的对应列，可以为NULL
+#' @param label 默认为TRUE，添加label列，表征被第几对关键词所识别
+#' @param verbose 是否输出被第二、三个关键词匹配的条目的详细信息，用于人工校验准确性。
+#'
+#' @return A list，包含两个数据框，第一个matched：合并后的数据框，第二个lost，不能被识别的行.可能的问题：1. 如果两个ensembl id对应同一个HGNC，那么第二轮
+#' 用HGNC匹配时，可能仅能匹配到一个Ensebmbl id。同理第三轮匹配也是。
+#' @export
+#'
+#' @examples
+#' #NULL
+mapping_join <- function(inputDF, db = ADataframe, by.input = NULL, by.db = NULL, by.input.2 = NULL, by.db.2 = NULL,by.input.3 = NULL, by.db.3 = NULL, label = TRUE,
+                         verbose = TRUE){
+  message(paste0("1. 依据input里的",by.input,"列和数据库里的",by.db,"列进行数据比对:"))
+  check_db <- function(db, column){ # 依据某一列，去除重复行。
+    if(any(duplicated(db[,column]))){
+      warning("数据库中的",column,"列发现有重复值，仅保留第一个出现的值。")
+      return(db[!duplicated(db[,column]),])
+    }else{
+      return(db)
+    }
+  }
+  ###### First match
+  db.1 <- check_db(db, column = by.db)
+  mapped <- inputDF[inputDF[,by.input] %in% db.1[,by.db],]
+  if (nrow(mapped) == 0) { stop("0行可被匹配，请检查对应列的设置是否正确！") }
+  db.1.sub <- db.1[match(mapped[,by.input], db.1[,by.db]),]
+  mapped <- cbind(mapped, db.1.sub)
+  if (label) { mapped$label = paste("First",by.input,by.db, sep = "_") } # 标记为被第一个关键词匹配上的
+  lost <- inputDF[!inputDF[,by.input] %in% db.1[,by.db],]
+  message(paste0(nrow(lost),"行未被对应上。"))
+  if(nrow(lost) == 0 | is.null(by.input.2) | is.null(by.db.2)){ # 仅靠一列识别
+    return(list(matched = mapped, lost = lost))
+  }else{
+    ############ Second match
+    message(paste0("2. 依据input里的",by.input.2,"列和数据库里的",by.db.2,"列对未匹配的数据再次进行比对:"))
+    db.2 <- check_db(db, column = by.db.2)
+    lost.mapped <- lost[lost[,by.input.2] %in% db.2[,by.db.2],]
+    if (nrow(lost.mapped) != 0) {
+      db.2.sub <- db.2[match(lost.mapped[,by.input.2], db.2[,by.db.2]),]
+      lost.mapped <- cbind(lost.mapped, db.2.sub)
+      if(label){lost.mapped$label = paste("Second",by.input,by.db, sep = "_") }  # 标记为被第二个关键词匹配上的
+      if(verbose){message("请手动检查以下替换是否正确！")}
+      if(verbose){message("替换前：")}
+      if(verbose){print(lost.mapped[,c(by.input, by.input.2, by.input.3)])}
+      if(verbose){message("替换后：")}
+      if(verbose){print(lost.mapped[,c(by.input, by.input.2, by.input.3)])}
+      if(any(lost.mapped[,by.input] %in% mapped[,by.input])){
+        message("注意：以下条目与第一次匹配到的条目有重复。")
+        print(lost.mapped[lost.mapped[,by.input] %in% mapped[,by.input],c(by.input, by.input.2, by.input.3)])
+      }
+    }
+    lost.lost <- lost[!lost[,by.input.2] %in% db.2[,by.db.2],]
+    message(paste0(nrow(lost.lost),"行未被对应上。"))
+    if (nrow(lost.lost) == 0 | is.null(by.input.3) | is.null(by.db.3)) { # 仅靠两列识别
+      if(nrow(lost.mapped) != 0){return(list(matched = rbind(mapped, lost.mapped), lost = lost.lost))
+      }else{return(list(matched = mapped, lost = lost.lost))}
+    }else{
+      ########### Third match
+      message(paste0("3. 依据input里的",by.input.3,"列和数据库里的",by.db.3,"列对未匹配的数据再次进行比对:"))
+      db.3 <- check_db(db, column = by.db.3)
+      lost.lost.mapped <- lost.lost[lost.lost[,by.input.3] %in% db.3[,by.db.3],]
+      if (nrow(lost.lost.mapped) != 0) {
+        db.3.sub <- db.3[match(lost.lost.mapped[,by.input.3], db.3[,by.db.3]),]
+        lost.lost.mapped <- cbind(lost.lost.mapped, db.3.sub)
+        if(label) { lost.lost.mapped$label = "Third" }   # 标记为被第三个关键词匹配上的
+        if(verbose){message("请手动检查以下替换是否正确！")}
+        if(verbose){message("替换前：")}
+        if(verbose){print(lost.lost.mapped[,c(by.input, by.input.2, by.input.3)])}
         if(verbose){message("替换后：")}
         if(verbose){print(lost.lost.mapped[,c(by.input, by.input.2, by.input.3)])}
         if(any(lost.lost.mapped[,by.input] %in% mapped[,by.input])){
