@@ -85,6 +85,9 @@ dt
 #> 7       X1        C     4
 #> 8       X2        C     4
 #> 9       X3        C     5
+```
+
+``` r
 Aggregate_df(df = dt, id = colnames(dt)[1])
 #>   genotype variable   value
 #> 1       X1  A; B; C 1; 2; 4
@@ -116,6 +119,9 @@ update_IDs(old = c("2","2","1"), # 要被转换的id向量，元素可以是多�
            split = NULL,  # 如果ID向量中的元素为多个id组合，需要指定分割符号，默认为NULL，即为单个ID，无需分割
            fixed = TRUE) # 默认TRUE，被strsplit函数继承的参数
 #> [1] "B" "B" "A"
+```
+
+``` r
 
 update_IDs(old = c("2;2","3","1"), 
            db = db,
@@ -144,6 +150,118 @@ mapping_update(inputDF = tf.full.database,
                by.input = "Ensembl.ID", by.db = "Ensembl", 
                by.input.2 = "HGNC.symbol", by.db.2 = "Symbol",
                by.input.3 = "EntrezGene.ID", by.db.3 = "EntrezID")
+```
+
+``` r
+demo_df1 <- data.frame(A = c("a", "b", "c", "d", "e", "f","g"),
+                       B = c("A", "B", "C", "D", "E", "F", "G"),
+                       C = c(11, 12, 13, 14, 15, 6, 7))
+
+demo_df2 <- data.frame(a = c("a", "b", "c", "dd", "ee", "ff", "h"),
+                       b = c("A", "BB", "C", "D", "E", "FF", "H"),
+                       c = c(21, 22, 23, 24, 25, 6, 77))
+
+mapping_update(inputDF = demo_df1, 
+               db = demo_df2, 
+               by.input = "A", by.db = "a", 
+               by.input.2 = "B", by.db.2 = "b",
+               by.input.3 = "C", by.db.3 = "c")
+#> 1. 依据input里的A列和数据库里的a列进行数据比对:
+#> 4行未被对应上。
+#> 2. 依据input里的B列和数据库里的b列对未匹配的数据再次进行比对:
+#> 请手动检查以下替换是否正确！
+#> 替换前：
+#>   A B  C
+#> 4 d D 14
+#> 5 e E 15
+#> 替换后：
+#>    A B  C
+#> 4 dd D 14
+#> 5 ee E 15
+#> 2行未被对应上。
+#> 3. 依据input里的C列和数据库里的c列对未匹配的数据再次进行比对:
+#> 请手动检查以下替换是否正确！
+#> 替换前：
+#>   A B C
+#> 6 f F 6
+#> 替换后：
+#>    A B C
+#> 6 ff F 6
+#> 1行未被对应上。
+#> $matched
+#>    A B  C  label
+#> 1  a A 11  First
+#> 2  b B 12  First
+#> 3  c C 13  First
+#> 4 dd D 14 Second
+#> 5 ee E 15 Second
+#> 6 ff F  6  Third
+#> 
+#> $lost
+#>   A B C
+#> 7 g G 7
+```
+
+#### mapping_join
+
+基于至多3对关键词，合并两个数据框
+
+与mapping_update的区别，mapping_join不会修改原来的数据，只是在原来数据的基础上，添加新数据到新的列中。
+
+返回1个list，包含两个数据框，第一个matched：合并后的数据框，第二个lost，不能被识别的行。
+
+注意：该函数的第一个关键词，即by.input列，应为绝大多数能被匹配上的。关键词可以重复使用，每次的关键词对不同即可。另外，该函数在后两轮匹配时，会输出重复匹配的条目。
+
+关键词匹配是有优先顺序的，第一次被匹配上了，后续就不会再去做匹配。
+
+``` r
+mapping_join(inputDF = tf.full.database, 
+               db = gtf, 
+               by.input = "Ensembl.ID", by.db = "Ensembl", 
+               by.input.2 = "HGNC.symbol", by.db.2 = "Symbol",
+               by.input.3 = "EntrezGene.ID", by.db.3 = "EntrezID")
+```
+
+``` r
+mapping_join(inputDF = demo_df1, 
+               db = demo_df2, 
+               by.input = "A", by.db = "a", 
+               by.input.2 = "B", by.db.2 = "b",
+               by.input.3 = "C", by.db.3 = "c")
+#> 1. 依据input里的A列和数据库里的a列进行数据比对:
+#> 4行未被对应上。
+#> 2. 依据input里的B列和数据库里的b列对未匹配的数据再次进行比对:
+#> 请手动检查以下替换是否正确！
+#> 替换前：
+#>   A B  C
+#> 4 d D 14
+#> 5 e E 15
+#> 替换后：
+#>   A B  C
+#> 4 d D 14
+#> 5 e E 15
+#> 2行未被对应上。
+#> 3. 依据input里的C列和数据库里的c列对未匹配的数据再次进行比对:
+#> 请手动检查以下替换是否正确！
+#> 替换前：
+#>   A B C
+#> 6 f F 6
+#> 替换后：
+#>   A B C
+#> 6 f F 6
+#> 1行未被对应上。
+#> $matched
+#>   A B  C  a  b  c      label
+#> 1 a A 11  a  A 21  First_A_a
+#> 2 b B 12  b BB 22  First_A_a
+#> 3 c C 13  c  C 23  First_A_a
+#> 4 d D 14 dd  D 24 Second_A_a
+#> 5 e E 15 ee  E 25 Second_A_a
+#> 6 f F  6 ff FF  6      Third
+#> 
+#> $lost
+#>   A B C
+#> 7 g G 7
 ```
 
 ### 2.3 HGNC 数据库相关的
@@ -184,21 +302,21 @@ df <- read.delim(system.file("extdata", "David_outputs_GO.txt", package = "Zhang
 David_barplot(df, fill.color = c("#ff9999","#ff0000"),x = "Fold.Enrichment", xlabel = "Fold Enrichment")
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-14-1.png" width="100%" />
 
 ``` r
 
 David_barplot(df, x = "Fold.Enrichment", xlabel = "Fold Enrichment", arrange.by.x = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-14-2.png" width="100%" />
 
 ``` r
 
 df %>% dplyr::mutate(fdr = -log(FDR, base=10)) %>% David_barplot(x = "fdr", xlabel = "-log(10)FDR")
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-3.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-14-3.png" width="100%" />
 
 ``` r
 
@@ -207,7 +325,7 @@ kegg.res <- read.delim(system.file("extdata", "David_outputs_KEGG.txt",package =
 David_barplot(df = kegg.res,  fill.color = c("#ff9999","#ff0000"),x = "Fold.Enrichment", xlabel = "Fold Enrichment")
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-4.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-14-4.png" width="100%" />
 
 #### David富集结果绘图 - **气泡图**
 
@@ -219,22 +337,22 @@ df <- read.delim(system.file("extdata", "David_outputs_KEGG.txt", package = "Zha
 David_dotplot(df)
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-15-1.png" width="100%" />
 
 ``` r
 
 David_dotplot(df, arrange.by.x = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-15-2.png" width="100%" />
 
 ## Session Info
 
 ``` r
 sessionInfo()
-#> R version 4.3.0 (2023-04-21 ucrt)
-#> Platform: x86_64-w64-mingw32/x64 (64-bit)
-#> Running under: Windows 10 x64 (build 19045)
+#> R version 4.4.1 (2024-06-14 ucrt)
+#> Platform: x86_64-w64-mingw32/x64
+#> Running under: Windows 11 x64 (build 22631)
 #> 
 #> Matrix products: default
 #> 
@@ -256,13 +374,13 @@ sessionInfo()
 #> [1] ZhangRtools_0.0.0.9000
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] vctrs_0.6.2      cli_3.6.1        knitr_1.43       rlang_1.1.1     
-#>  [5] xfun_0.39        highr_0.10       generics_0.1.3   labeling_0.4.2  
-#>  [9] glue_1.6.2       colorspace_2.1-0 htmltools_0.5.5  scales_1.3.0    
-#> [13] fansi_1.0.4      rmarkdown_2.22   grid_4.3.0       munsell_0.5.0   
-#> [17] evaluate_0.21    tibble_3.2.1     fastmap_1.1.1    yaml_2.3.7      
-#> [21] lifecycle_1.0.3  compiler_4.3.0   dplyr_1.1.2      pkgconfig_2.0.3 
-#> [25] rstudioapi_0.14  farver_2.1.1     digest_0.6.31    R6_2.5.1        
-#> [29] tidyselect_1.2.0 utf8_1.2.3       pillar_1.9.0     magrittr_2.0.3  
-#> [33] withr_2.5.0      tools_4.3.0      gtable_0.3.3     ggplot2_3.4.4
+#>  [1] vctrs_0.6.5       cli_3.6.3         knitr_1.47        rlang_1.1.4      
+#>  [5] xfun_0.45         highr_0.11        generics_0.1.3    labeling_0.4.3   
+#>  [9] glue_1.7.0        colorspace_2.1-0  htmltools_0.5.8.1 scales_1.3.0     
+#> [13] fansi_1.0.6       rmarkdown_2.27    grid_4.4.1        munsell_0.5.1    
+#> [17] evaluate_0.24.0   tibble_3.2.1      fastmap_1.2.0     yaml_2.3.8       
+#> [21] lifecycle_1.0.4   compiler_4.4.1    dplyr_1.1.4       pkgconfig_2.0.3  
+#> [25] rstudioapi_0.16.0 farver_2.1.2      digest_0.6.36     R6_2.5.1         
+#> [29] tidyselect_1.2.1  utf8_1.2.4        pillar_1.9.0      magrittr_2.0.3   
+#> [33] withr_3.0.0       tools_4.4.1       gtable_0.3.5      ggplot2_3.5.1
 ```

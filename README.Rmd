@@ -138,6 +138,50 @@ mapping_update(inputDF = tf.full.database,
 ```
 
 
+```{r}
+demo_df1 <- data.frame(A = c("a", "b", "c", "d", "e", "f","g"),
+                       B = c("A", "B", "C", "D", "E", "F", "G"),
+                       C = c(11, 12, 13, 14, 15, 6, 7))
+
+demo_df2 <- data.frame(a = c("a", "b", "c", "dd", "ee", "ff", "h"),
+                       b = c("A", "BB", "C", "D", "E", "FF", "H"),
+                       c = c(21, 22, 23, 24, 25, 6, 77))
+
+mapping_update(inputDF = demo_df1, 
+               db = demo_df2, 
+               by.input = "A", by.db = "a", 
+               by.input.2 = "B", by.db.2 = "b",
+               by.input.3 = "C", by.db.3 = "c")
+```
+
+#### mapping_join
+
+基于至多3对关键词，合并两个数据框
+
+与mapping_update的区别，mapping_join不会修改原来的数据，只是在原来数据的基础上，添加新数据到新的列中。
+
+返回1个list，包含两个数据框，第一个matched：合并后的数据框，第二个lost，不能被识别的行。
+
+注意：该函数的第一个关键词，即by.input列，应为绝大多数能被匹配上的。关键词可以重复使用，每次的关键词对不同即可。另外，该函数在后两轮匹配时，会输出重复匹配的条目。
+
+关键词匹配是有优先顺序的，第一次被匹配上了，后续就不会再去做匹配。
+
+```{r eval=FALSE}
+mapping_join(inputDF = tf.full.database, 
+               db = gtf, 
+               by.input = "Ensembl.ID", by.db = "Ensembl", 
+               by.input.2 = "HGNC.symbol", by.db.2 = "Symbol",
+               by.input.3 = "EntrezGene.ID", by.db.3 = "EntrezID")
+```
+
+
+```{r}
+mapping_join(inputDF = demo_df1, 
+               db = demo_df2, 
+               by.input = "A", by.db = "a", 
+               by.input.2 = "B", by.db.2 = "b",
+               by.input.3 = "C", by.db.3 = "c")
+```
 
 ### 2.3 HGNC 数据库相关的
 

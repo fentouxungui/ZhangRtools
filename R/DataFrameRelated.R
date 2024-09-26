@@ -229,9 +229,9 @@ mapping_update <- function(inputDF, db = ADataframe, by.input = NULL, by.db = NU
 #' @param db 要被加进来的数据
 #' @param by.input 原数据框里的第一识别列（也是要被更新的列）
 #' @param by.db 新数据框里的第一识别列的对应列
-#' @param by.input.2 原数据框里的第二识别列，当第一识别列不能被识别时才启用（不会被更新），可以为NULL
+#' @param by.input.2 原数据框里的第二识别列，当第一识别列不能被识别时才启用，可以为NULL
 #' @param by.db.2 新数据框里的第二识别列的对应列，可以为NULL
-#' @param by.input.3 原数据框里的第三识别列，当第一和第二识别列均不能被识别时才启用（不会被更新），可以为NULL
+#' @param by.input.3 原数据框里的第三识别列，当第一和第二识别列均不能被识别时才启用，可以为NULL
 #' @param by.db.3 新数据框里的第三识别列的对应列，可以为NULL
 #' @param label 默认为TRUE，添加label列，表征被第几对关键词所识别
 #' @param verbose 是否输出被第二、三个关键词匹配的条目的详细信息，用于人工校验准确性。
@@ -296,7 +296,7 @@ mapping_join <- function(inputDF, db = ADataframe, by.input = NULL, by.db = NULL
       if (nrow(lost.lost.mapped) != 0) {
         db.3.sub <- db.3[match(lost.lost.mapped[,by.input.3], db.3[,by.db.3]),]
         lost.lost.mapped <- cbind(lost.lost.mapped, db.3.sub)
-        if(label) { lost.lost.mapped$label = "Third" }   # 标记为被第三个关键词匹配上的
+        if(label) { lost.lost.mapped$label =  paste("Third",by.input,by.db, sep = "_") }   # 标记为被第三个关键词匹配上的
         if(verbose){message("请手动检查以下替换是否正确！")}
         if(verbose){message("替换前：")}
         if(verbose){print(lost.lost.mapped[,c(by.input, by.input.2, by.input.3)])}
