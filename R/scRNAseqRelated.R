@@ -48,10 +48,11 @@ top_genes <- function (SeuratObj, expr.cut = 0.01) {
 #' @param remove_axes 是否需要删除xy坐标轴
 #' @param ...
 #'
-#' @return
+#' @return NULL
 #' @export
 #'
 #' @examples
+#' # FeaturePlot_Single(obj = cds, feature = "Lgr5", SplitBy = 'class', ncol = 4, remvove_axes = TRUE)
 FeaturePlot_Single <- function(obj, feature, SplitBy, PointColor = c("#638ED0", "#ffff33","#ff3300"), ncol = NULL, remove_axes = FALSE, ...){
   library(ggpubr)
   library(grDevices)
