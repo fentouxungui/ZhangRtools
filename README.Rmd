@@ -206,6 +206,18 @@ top_genes(SeuratObj,
           expr.cut = 0.01) # 针对UMI counts比例所设定的cut off，用于定义高表达的基因。
 ```
 
+#### modified FeaturePlot
+
+```{r fig.width=9,fig.height=4}
+library(SeuratExplorerServer)
+rds.file <- paste(c(system.file(package ="SeuratExplorerServer"), "extdata/demo/fly-gut-EEs-scRNA/Rds-file/G101_PC20res04.rds"), collapse = "/")
+cds <- readRDS(rds.file)
+cds
+FeaturePlot_Single(cds, feature = 'NPF', SplitBy = 'RandomGroup',remove_axes = FALSE)
+FeaturePlot_Single(cds, feature = 'NPF', SplitBy = 'RandomGroup',remove_axes = TRUE)
+FeaturePlot_Single(cds, feature = 'NPF', SplitBy = 'RandomGroup',remove_axes = FALSE, PointColor = c("gray", "red"))
+```
+
 
 ### 2.5 简单绘图
 

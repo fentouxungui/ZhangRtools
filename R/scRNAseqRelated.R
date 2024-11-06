@@ -53,7 +53,7 @@ top_genes <- function (SeuratObj, expr.cut = 0.01) {
 #'
 #' @examples
 #' # FeaturePlot_Single(obj = cds, feature = "Lgr5", SplitBy = 'class', ncol = 4, remvove_axes = TRUE)
-FeaturePlot_Single <- function(obj, feature, SplitBy, PointColor = c("#638ED0", "#ffff33","#ff3300"), ncol = NULL, remove_axes = FALSE, ...){
+FeaturePlot_Single <- function(obj, feature, SplitBy, PointColor = c("#638ED0", "#ffff33","#ff3300"), n_columns = NULL, remove_axes = FALSE, ...){
   library(ggpubr)
   library(grDevices)
   library(Seurat)
@@ -73,7 +73,10 @@ FeaturePlot_Single <- function(obj, feature, SplitBy, PointColor = c("#638ED0", 
   }
 
   # plot each group
-  all_cells<- colnames(obj)
+  all_cells <- colnames(obj)
+  if (!is.factor(obj@meta.data[, SplitBy])) {
+    obj@meta.data[, SplitBy] <- as.factor(obj@meta.data[, SplitBy])
+  }
   groups <- levels(obj@meta.data[, SplitBy])
   # print(groups)
   # the minimal and maximal of the value to make the legend scale the same.
@@ -152,14 +155,14 @@ FeaturePlot_Single <- function(obj, feature, SplitBy, PointColor = c("#638ED0", 
     }
   }
 
-  if (is.null(ncol)) {
-    ncol = length(levels(groups))
+  if (is.null(n_columns)) {
+    n_columns = length(groups)
   }
 
   # https://github.com/kassambara/ggpubr/issues/347
   legend_max <- get_legend(ps[[group_has_the_maximum_value]], position = NULL)
 
-  ps <- ggarrange(plotlist = ps, common.legend = TRUE, legend="right", ncol = ncol, legend.grob = legend_max)
+  ps <- ggarrange(plotlist = ps, common.legend = TRUE, legend="right", ncol = n_columns, legend.grob = legend_max)
   annotate_figure(ps, left = text_grob(feature, face = "italic", size = 10))
 }
 
