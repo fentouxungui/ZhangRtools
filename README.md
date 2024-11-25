@@ -294,13 +294,22 @@ top_genes(SeuratObj,
 
 ``` r
 library(SeuratExplorerServer)
-rds.file <- paste(c(system.file(package ="SeuratExplorerServer"), "extdata/demo/fly-gut-EEs-scRNA/Rds-file/G101_PC20res04.rds"), collapse = "/")
+#> Warning: replacing previous import 'R.utils::validate' by 'shiny::validate'
+#> when loading 'SeuratExplorerServer'
+#> Warning: replacing previous import 'R.utils::setProgress' by
+#> 'shiny::setProgress' when loading 'SeuratExplorerServer'
+#> Warning: replacing previous import 'R.utils::timestamp' by 'utils::timestamp'
+#> when loading 'SeuratExplorerServer'
+```
+
+``` r
+rds.file <- paste(c(system.file(package ="SeuratExplorerServer"), "extdata/demo/fly/Rds-file/G101_PC20res04.rds"), collapse = "/")
 cds <- readRDS(rds.file)
 cds
 #> An object of class Seurat 
 #> 9319 features across 1000 samples within 1 assay 
 #> Active assay: RNA (9319 features, 737 variable features)
-#>  3 layers present: counts, data, scale.data
+#>  2 layers present: counts, data
 #>  2 dimensional reductions calculated: pca, tsne
 ```
 
@@ -422,6 +431,23 @@ David_dotplot(df, arrange.by.x = TRUE)
 
 <img src="man/figures/README-unnamed-chunk-16-2.png" width="100%" />
 
+#### 火山图 风格一
+
+``` r
+df <- read.csv(system.file("extdata", "volcano-plot-data.csv", package = "ZhangRtools"), stringsAsFactors = FALSE)
+plot.data <- data.frame(gene = df$Symbol,
+                   pval = -log10(df$FDR),
+                   lfc = df$logFC)
+Volcano_plot_1(plot.data = plot.data, markers = c("cv-c","pbl","msi","shn","E(spl)mbeta-HLH","E(spl)m3-HLH","E(spl)m7-HLH","puc","Socs36E","geminin","Blm"))
+#> Warning in transformation$transform(x): 产生了NaNs
+#> Warning in scale_y_continuous(trans = "log1p"): log1p transformation introduced
+#> infinite values.
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_hline()`).
+```
+
+<img src="man/figures/README-unnamed-chunk-17-1.png" width="100%" />
+
 ## Session Info
 
 ``` r
@@ -450,7 +476,7 @@ sessionInfo()
 #> [1] ggeasy_0.1.5                    Seurat_5.1.0                   
 #> [3] SeuratObject_5.0.2              sp_2.1-4                       
 #> [5] ggpubr_0.6.0                    ggplot2_3.5.1                  
-#> [7] SeuratExplorerServer_0.0.1.0000 ZhangRtools_0.0.0.9000         
+#> [7] SeuratExplorerServer_0.0.1.0002 ZhangRtools_0.0.0.9000         
 #> 
 #> loaded via a namespace (and not attached):
 #>   [1] RColorBrewer_1.1-3        rstudioapi_0.16.0        

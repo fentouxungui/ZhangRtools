@@ -210,7 +210,7 @@ top_genes(SeuratObj,
 
 ```{r fig.width=9,fig.height=4}
 library(SeuratExplorerServer)
-rds.file <- paste(c(system.file(package ="SeuratExplorerServer"), "extdata/demo/fly-gut-EEs-scRNA/Rds-file/G101_PC20res04.rds"), collapse = "/")
+rds.file <- paste(c(system.file(package ="SeuratExplorerServer"), "extdata/demo/fly/Rds-file/G101_PC20res04.rds"), collapse = "/")
 cds <- readRDS(rds.file)
 cds
 FeaturePlot_Single(cds, feature = 'NPF', SplitBy = 'RandomGroup',remove_axes = FALSE)
