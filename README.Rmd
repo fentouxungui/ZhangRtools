@@ -251,6 +251,17 @@ David_dotplot(df)
 David_dotplot(df, arrange.by.x = TRUE)
 ```
 
+#### 火山图 风格一
+
+```{r fig.width=6,fig.height=6}
+df <- read.csv(system.file("extdata", "volcano-plot-data.csv", package = "ZhangRtools"), stringsAsFactors = FALSE)
+plot.data <- data.frame(gene = df$Symbol,
+                   pval = -log10(df$FDR),
+                   lfc = df$logFC)
+Volcano_plot_1(plot.data = plot.data, markers = c("cv-c","pbl","msi","shn","E(spl)mbeta-HLH","E(spl)m3-HLH","E(spl)m7-HLH","puc","Socs36E","geminin","Blm"))
+```
+
+
 ## Session Info
 
 ```{r}

@@ -9,7 +9,7 @@ FeaturePlot_Single(
   feature,
   SplitBy,
   PointColor = c("#638ED0", "#ffff33", "#ff3300"),
-  ncol = NULL,
+  n_columns = NULL,
   remove_axes = FALSE,
   ...
 )
@@ -23,11 +23,11 @@ FeaturePlot_Single(
 
 \item{PointColor}{colors for low, middle, high expression}
 
-\item{ncol}{number of columns to show plots}
-
 \item{remove_axes}{是否需要删除xy坐标轴}
 
 \item{...}{}
+
+\item{ncol}{number of columns to show plots}
 }
 \description{
 对单个基因绘制splited feature plot，支持使用common legend

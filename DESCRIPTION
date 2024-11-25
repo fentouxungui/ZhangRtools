@@ -18,7 +18,8 @@ Imports:
     magrittr,
     stats,
     dplyr,
-    ggplot2
+    ggplot2,
+    ggrepel
 Suggests:
     Seurat,
     parallel,
