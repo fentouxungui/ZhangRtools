@@ -15,7 +15,7 @@ top_genes <- function (SeuratObj, expr.cut = 0.01) {
   requireNamespace("parallel")
   requireNamespace("dplyr")
   requireNamespace("Seurat")
-  if (grepl("^5", SeuratObj@version)) {
+  if (class(SeuratObj@assays$RNA)[1] == "Assay5") {
     SeuratObj <- JoinLayers(SeuratObj)
     counts.expr <- as.matrix(SeuratObj@assays$RNA@layers$counts)
   } else {
