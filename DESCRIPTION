@@ -1,6 +1,6 @@
 Package: ZhangRtools
-Title: Functions created by ZhangYC
-Version: 0.0.0.9000
+Title: Some Functions Frequenctly Used
+Version: 0.0.1
 Authors@R: 
     person(given = "Zhang", 
     family = "Yongcaho", 

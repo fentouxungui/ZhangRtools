@@ -10,7 +10,8 @@ update_IDs(
   from = NULL,
   to = NULL,
   split = NULL,
-  fixed = TRUE
+  fixed = TRUE,
+  collapse = ";"
 )
 }
 \arguments{

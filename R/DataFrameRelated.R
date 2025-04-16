@@ -67,6 +67,11 @@ Aggregate_df <- function(df, id){
 #' @examples
 #' #NULL
 Expand_df <- function(df, id, splitby = "/"){
+  if (splitby %in% c('.', "|")) {
+    # refer to: https://stackoverflow.com/questions/26665100/how-to-use-the-strsplit-function-with-a-period
+    stop("Please replace splitby with [.] [|] etc. in case of eval error.")
+  }
+
   temp.list <- split(df,df[,id])
   columns <- setdiff(colnames(df), id)
   temp.list <- lapply(temp.list, function(x){
@@ -94,13 +99,21 @@ Expand_df <- function(df, id, splitby = "/"){
 #'
 #' @examples
 #' #NULL
-update_IDs <- function(old, db = ADataframe, from = NULL, to = NULL, split = NULL, fixed = TRUE){
+update_IDs <- function(old, db = ADataframe, from = NULL, to = NULL, split = NULL, fixed = TRUE, collapse = ";"){
   if (any(duplicated(db[,from]))) {
-    warning("from列有重复值，仅保留第一个出现的ID。")
+    message("Check db: from column from raw db 有重复值.")
     db <- db[!duplicated(db[,from]),]
   }
-  mapping <- db[,to]
-  names(mapping) <- db[,from]
+  old.splited <- trimws(unlist(strsplit(old, split = split, fixed = fixed)))
+  db_sub <- db[db[,from] %in% old.splited,]
+
+  if (any(duplicated(db_sub[,from]))) {
+    warning("Check db: 注意, from column from subset db 有重复值.请谨慎对待.")
+    db_sub <- db_sub[!duplicated(db_sub[,from]),]
+  }
+
+  mapping <- db_sub[,to]
+  names(mapping) <- db_sub[,from]
 
   res <- c()
   for (i in old) {
@@ -111,7 +124,7 @@ update_IDs <- function(old, db = ADataframe, from = NULL, to = NULL, split = NUL
         res <- append(res, NA)
       }else{
         old.vector <- trimws(unlist(strsplit(i, split = split, fixed = fixed)))
-        res <- append(res, paste0(mapping[old.vector], collapse = ";"))
+        res <- append(res, paste0(mapping[old.vector], collapse = collapse))
       }
     }
   }

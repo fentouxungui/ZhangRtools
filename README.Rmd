@@ -13,10 +13,16 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r echo=FALSE, results="hide", message=FALSE}
+library(badger)
+```
+
 # ZhangRtools
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+`r badge_lifecycle("stable")`
+`r badge_devel("fentouxungui/SeuratExplorerServer", "rossellhayes")`
+`r badge_code_size("fentouxungui/SeuratExplorerServer")`
 <!-- badges: end -->
 
 > 工作中常用到的一些基于R的功能，整理到一起了，方便重复使用。
@@ -209,10 +215,14 @@ top_genes(SeuratObj,
 #### modified FeaturePlot
 
 ```{r fig.width=9,fig.height=4}
-library(SeuratExplorerServer)
-rds.file <- paste(c(system.file(package ="SeuratExplorerServer"), "extdata/demo/fly/Rds-file/G101_PC20res04.rds"), collapse = "/")
+requireNamespace("SeuratExplorerServer")
+rds.file <- paste(c(system.file(package ="SeuratExplorerServer"), "extdata/source-data/fly/Rds-file/G101_PC20res04.rds"), collapse = "/")
+
+library(Seurat)
 cds <- readRDS(rds.file)
 cds
+
+library(ZhangRtools)
 FeaturePlot_Single(cds, feature = 'NPF', SplitBy = 'RandomGroup',remove_axes = FALSE)
 FeaturePlot_Single(cds, feature = 'NPF', SplitBy = 'RandomGroup',remove_axes = TRUE)
 FeaturePlot_Single(cds, feature = 'NPF', SplitBy = 'RandomGroup',remove_axes = FALSE, PointColor = c("gray", "red"))

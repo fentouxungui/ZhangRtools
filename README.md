@@ -5,8 +5,9 @@
 
 <!-- badges: start -->
 
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![](https://img.shields.io/badge/devel%20version-0.0.1-rossellhayes.svg)](https://github.com/fentouxungui/SeuratExplorerServer)
+[![](https://img.shields.io/github/languages/code-size/fentouxungui/SeuratExplorerServer.svg)](https://github.com/fentouxungui/SeuratExplorerServer)
 <!-- badges: end -->
 
 > 工作中常用到的一些基于R的功能，整理到一起了，方便重复使用。
@@ -293,36 +294,44 @@ top_genes(SeuratObj,
 #### modified FeaturePlot
 
 ``` r
-library(SeuratExplorerServer)
-#> Warning: replacing previous import 'R.utils::validate' by 'shiny::validate'
-#> when loading 'SeuratExplorerServer'
-#> Warning: replacing previous import 'R.utils::setProgress' by
-#> 'shiny::setProgress' when loading 'SeuratExplorerServer'
-#> Warning: replacing previous import 'R.utils::timestamp' by 'utils::timestamp'
-#> when loading 'SeuratExplorerServer'
+requireNamespace("SeuratExplorerServer")
+#> 载入需要的命名空间：SeuratExplorerServer
 ```
 
 ``` r
-rds.file <- paste(c(system.file(package ="SeuratExplorerServer"), "extdata/demo/fly/Rds-file/G101_PC20res04.rds"), collapse = "/")
-cds <- readRDS(rds.file)
-cds
-#> An object of class Seurat 
-#> 9319 features across 1000 samples within 1 assay 
-#> Active assay: RNA (9319 features, 737 variable features)
-#>  2 layers present: counts, data
-#>  2 dimensional reductions calculated: pca, tsne
-```
+rds.file <- paste(c(system.file(package ="SeuratExplorerServer"), "extdata/source-data/fly/Rds-file/G101_PC20res04.rds"), collapse = "/")
 
-``` r
-FeaturePlot_Single(cds, feature = 'NPF', SplitBy = 'RandomGroup',remove_axes = FALSE)
-#> 载入需要的程序包：ggplot2
+library(Seurat)
 #> 载入需要的程序包：SeuratObject
 #> 载入需要的程序包：sp
+#> 'SeuratObject' was built under R 4.4.1 but the current version is
+#> 4.4.3; it is recomended that you reinstall 'SeuratObject' as the ABI
+#> for R may have changed
+#> 'SeuratObject' was built with package 'Matrix' 1.7.0 but the current
+#> version is 1.7.2; it is recomended that you reinstall 'SeuratObject' as
+#> the ABI for 'Matrix' may have changed
 #> 
 #> 载入程序包：'SeuratObject'
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, t
+```
+
+``` r
+cds <- readRDS(rds.file)
+cds
+#> An object of class Seurat 
+#> 9319 features across 1000 samples within 1 assay 
+#> Active assay: RNA (9319 features, 737 variable features)
+#>  3 layers present: counts, data, scale.data
+#>  2 dimensional reductions calculated: pca, tsne
+```
+
+``` r
+
+library(ZhangRtools)
+FeaturePlot_Single(cds, feature = 'NPF', SplitBy = 'RandomGroup',remove_axes = FALSE)
+#> 载入需要的程序包：ggplot2
 #> Scale for colour is already present.
 #> Adding another scale for colour, which will replace the existing scale.
 #> Scale for colour is already present.
@@ -337,7 +346,7 @@ FeaturePlot_Single(cds, feature = 'NPF', SplitBy = 'RandomGroup',remove_axes = F
 #> Adding another scale for y, which will replace the existing scale.
 ```
 
-<img src="man/figures/README-unnamed-chunk-14-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-15-1.png" width="100%" />
 
 ``` r
 FeaturePlot_Single(cds, feature = 'NPF', SplitBy = 'RandomGroup',remove_axes = TRUE)
@@ -355,7 +364,7 @@ FeaturePlot_Single(cds, feature = 'NPF', SplitBy = 'RandomGroup',remove_axes = T
 #> Adding another scale for y, which will replace the existing scale.
 ```
 
-<img src="man/figures/README-unnamed-chunk-14-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-15-2.png" width="100%" />
 
 ``` r
 FeaturePlot_Single(cds, feature = 'NPF', SplitBy = 'RandomGroup',remove_axes = FALSE, PointColor = c("gray", "red"))
@@ -373,7 +382,7 @@ FeaturePlot_Single(cds, feature = 'NPF', SplitBy = 'RandomGroup',remove_axes = F
 #> Adding another scale for y, which will replace the existing scale.
 ```
 
-<img src="man/figures/README-unnamed-chunk-14-3.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-15-3.png" width="100%" />
 
 ### 2.5 简单绘图
 
@@ -387,21 +396,21 @@ df <- read.delim(system.file("extdata", "David_outputs_GO.txt", package = "Zhang
 David_barplot(df, fill.color = c("#ff9999","#ff0000"),x = "Fold.Enrichment", xlabel = "Fold Enrichment")
 ```
 
-<img src="man/figures/README-unnamed-chunk-15-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-16-1.png" width="100%" />
 
 ``` r
 
 David_barplot(df, x = "Fold.Enrichment", xlabel = "Fold Enrichment", arrange.by.x = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-15-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-16-2.png" width="100%" />
 
 ``` r
 
 df %>% dplyr::mutate(fdr = -log(FDR, base=10)) %>% David_barplot(x = "fdr", xlabel = "-log(10)FDR")
 ```
 
-<img src="man/figures/README-unnamed-chunk-15-3.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-16-3.png" width="100%" />
 
 ``` r
 
@@ -410,7 +419,7 @@ kegg.res <- read.delim(system.file("extdata", "David_outputs_KEGG.txt",package =
 David_barplot(df = kegg.res,  fill.color = c("#ff9999","#ff0000"),x = "Fold.Enrichment", xlabel = "Fold Enrichment")
 ```
 
-<img src="man/figures/README-unnamed-chunk-15-4.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-16-4.png" width="100%" />
 
 #### David富集结果绘图 - **气泡图**
 
@@ -422,14 +431,14 @@ df <- read.delim(system.file("extdata", "David_outputs_KEGG.txt", package = "Zha
 David_dotplot(df)
 ```
 
-<img src="man/figures/README-unnamed-chunk-16-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-17-1.png" width="100%" />
 
 ``` r
 
 David_dotplot(df, arrange.by.x = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-16-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-17-2.png" width="100%" />
 
 #### 火山图 风格一
 
@@ -446,13 +455,13 @@ Volcano_plot_1(plot.data = plot.data, markers = c("cv-c","pbl","msi","shn","E(sp
 #> (`geom_hline()`).
 ```
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-18-1.png" width="100%" />
 
 ## Session Info
 
 ``` r
 sessionInfo()
-#> R version 4.4.1 (2024-06-14 ucrt)
+#> R version 4.4.3 (2025-02-28 ucrt)
 #> Platform: x86_64-w64-mingw32/x64
 #> Running under: Windows 11 x64 (build 22631)
 #> 
@@ -473,80 +482,84 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] ggeasy_0.1.5                    Seurat_5.1.0                   
-#> [3] SeuratObject_5.0.2              sp_2.1-4                       
-#> [5] ggpubr_0.6.0                    ggplot2_3.5.1                  
-#> [7] SeuratExplorerServer_0.0.1.0002 ZhangRtools_0.0.0.9000         
+#> [1] ggeasy_0.1.5           ggpubr_0.6.0           ggplot2_3.5.1         
+#> [4] Seurat_5.2.1           SeuratObject_5.0.2     sp_2.1-4              
+#> [7] ZhangRtools_0.0.0.9000 badger_0.2.4          
 #> 
 #> loaded via a namespace (and not attached):
-#>   [1] RColorBrewer_1.1-3        rstudioapi_0.16.0        
-#>   [3] jsonlite_1.8.8            billboarder_0.4.1        
-#>   [5] magrittr_2.0.3            spatstat.utils_3.0-5     
-#>   [7] farver_2.1.2              rmarkdown_2.27           
-#>   [9] vctrs_0.6.5               ROCR_1.0-11              
-#>  [11] memoise_2.0.1             spatstat.explore_3.2-7   
-#>  [13] askpass_1.2.0             rstatix_0.7.2            
-#>  [15] htmltools_0.5.8.1         broom_1.0.6              
-#>  [17] sass_0.4.9                sctransform_0.4.1        
-#>  [19] parallelly_1.37.1         KernSmooth_2.23-24       
-#>  [21] bslib_0.7.0               htmlwidgets_1.6.4        
-#>  [23] ica_1.0-3                 plyr_1.8.9               
-#>  [25] plotly_4.10.4             zoo_1.8-12               
-#>  [27] cachem_1.1.0              igraph_2.0.3             
-#>  [29] mime_0.12                 lifecycle_1.0.4          
-#>  [31] pkgconfig_2.0.3           Matrix_1.7-0             
-#>  [33] R6_2.5.1                  fastmap_1.2.0            
-#>  [35] fitdistrplus_1.1-11       future_1.33.2            
-#>  [37] shiny_1.8.1.1             digest_0.6.36            
-#>  [39] colorspace_2.1-0          patchwork_1.2.0          
-#>  [41] tensor_1.5                RSpectra_0.16-1          
-#>  [43] irlba_2.3.5.1             RSQLite_2.3.7            
-#>  [45] labeling_0.4.3            progressr_0.14.0         
-#>  [47] fansi_1.0.6               spatstat.sparse_3.1-0    
-#>  [49] httr_1.4.7                polyclip_1.10-6          
-#>  [51] abind_1.4-5               compiler_4.4.1           
-#>  [53] withr_3.0.0               bit64_4.0.5              
-#>  [55] backports_1.5.0           carData_3.0-5            
-#>  [57] DBI_1.2.3                 fastDummies_1.7.3        
-#>  [59] highr_0.11                R.utils_2.12.3           
-#>  [61] ggsignif_0.6.4            MASS_7.3-60.2            
-#>  [63] openssl_2.2.0             tools_4.4.1              
-#>  [65] lmtest_0.9-40             httpuv_1.6.15            
-#>  [67] future.apply_1.11.2       goftest_1.2-3            
-#>  [69] R.oo_1.26.0               glue_1.7.0               
-#>  [71] nlme_3.1-164              promises_1.3.0           
-#>  [73] grid_4.4.1                Rtsne_0.17               
-#>  [75] cluster_2.1.6             reshape2_1.4.4           
-#>  [77] generics_0.1.3            gtable_0.3.5             
-#>  [79] spatstat.data_3.1-2       R.methodsS3_1.8.2        
-#>  [81] tidyr_1.3.1               data.table_1.15.4        
-#>  [83] car_3.1-2                 utf8_1.2.4               
-#>  [85] spatstat.geom_3.2-9       RcppAnnoy_0.0.22         
-#>  [87] ggrepel_0.9.5             shinymanager_1.0.410     
-#>  [89] RANN_2.6.1                pillar_1.9.0             
-#>  [91] stringr_1.5.1             spam_2.10-0              
-#>  [93] RcppHNSW_0.6.0            later_1.3.2              
-#>  [95] splines_4.4.1             dplyr_1.1.4              
-#>  [97] lattice_0.22-6            bit_4.0.5                
-#>  [99] survival_3.6-4            deldir_2.0-4             
-#> [101] tidyselect_1.2.1          miniUI_0.1.1.1           
-#> [103] pbapply_1.7-2             knitr_1.47               
-#> [105] gridExtra_2.3             scattermore_1.2          
-#> [107] xfun_0.45                 shinydashboard_0.7.2     
-#> [109] matrixStats_1.3.0         DT_0.33                  
-#> [111] stringi_1.8.4             scrypt_0.1.6             
-#> [113] lazyeval_0.2.2            yaml_2.3.8               
-#> [115] shinyWidgets_0.8.6        evaluate_0.24.0          
-#> [117] codetools_0.2-20          tibble_3.2.1             
-#> [119] cli_3.6.3                 uwot_0.2.2               
-#> [121] xtable_1.8-4              reticulate_1.38.0        
-#> [123] munsell_0.5.1             jquerylib_0.1.4          
-#> [125] Rcpp_1.0.12               SeuratExplorer_0.0.6.0000
-#> [127] globals_0.16.3            spatstat.random_3.2-3    
-#> [129] png_0.1-8                 parallel_4.4.1           
-#> [131] blob_1.2.4                dotCall64_1.1-1          
-#> [133] listenv_0.9.1             viridisLite_0.4.2        
-#> [135] scales_1.3.0              ggridges_0.5.6           
-#> [137] leiden_0.4.3.1            purrr_1.0.2              
-#> [139] rlang_1.1.4               cowplot_1.1.3
+#>   [1] RcppAnnoy_0.0.22           splines_4.4.3             
+#>   [3] later_1.3.2                tibble_3.2.1              
+#>   [5] R.oo_1.26.0                polyclip_1.10-6           
+#>   [7] fastDummies_1.7.3          shinymanager_1.0.410      
+#>   [9] lifecycle_1.0.4            rstatix_0.7.2             
+#>  [11] globals_0.16.3             lattice_0.22-6            
+#>  [13] MASS_7.3-64                backports_1.5.0           
+#>  [15] magrittr_2.0.3             plotly_4.10.4             
+#>  [17] sass_0.4.9                 rmarkdown_2.27            
+#>  [19] jquerylib_0.1.4            yaml_2.3.8                
+#>  [21] dlstats_0.1.7              shinyBS_0.61.1            
+#>  [23] httpuv_1.6.15              sctransform_0.4.1         
+#>  [25] spam_2.10-0                askpass_1.2.0             
+#>  [27] spatstat.sparse_3.1-0      reticulate_1.38.0         
+#>  [29] cowplot_1.1.3              pbapply_1.7-2             
+#>  [31] DBI_1.2.3                  RColorBrewer_1.1-3        
+#>  [33] abind_1.4-5                rvcheck_0.2.1             
+#>  [35] Rtsne_0.17                 purrr_1.0.2               
+#>  [37] R.utils_2.12.3             yulab.utils_0.1.4         
+#>  [39] data.tree_1.1.0            ggrepel_0.9.5             
+#>  [41] irlba_2.3.5.1              listenv_0.9.1             
+#>  [43] spatstat.utils_3.0-5       goftest_1.2-3             
+#>  [45] RSpectra_0.16-1            spatstat.random_3.2-3     
+#>  [47] fitdistrplus_1.1-11        parallelly_1.37.1         
+#>  [49] codetools_0.2-20           DT_0.33                   
+#>  [51] tidyselect_1.2.1           farver_2.1.2              
+#>  [53] shinyWidgets_0.8.6         matrixStats_1.3.0         
+#>  [55] spatstat.explore_3.2-7     SeuratExplorerServer_0.1.1
+#>  [57] jsonlite_1.8.8             progressr_0.14.0          
+#>  [59] ggridges_0.5.6             survival_3.8-3            
+#>  [61] tools_4.4.3                ica_1.0-3                 
+#>  [63] Rcpp_1.0.12                glue_1.7.0                
+#>  [65] gridExtra_2.3              SeuratExplorer_0.1.1      
+#>  [67] xfun_0.45                  dplyr_1.1.4               
+#>  [69] shinydashboard_0.7.2       withr_3.0.0               
+#>  [71] BiocManager_1.30.23        fastmap_1.2.0             
+#>  [73] fansi_1.0.6                openssl_2.2.0             
+#>  [75] digest_0.6.36              R6_2.5.1                  
+#>  [77] mime_0.12                  colorspace_2.1-0          
+#>  [79] scattermore_1.2            tensor_1.5                
+#>  [81] spatstat.data_3.1-2        RSQLite_2.3.7             
+#>  [83] R.methodsS3_1.8.2          utf8_1.2.4                
+#>  [85] tidyr_1.3.1                generics_0.1.3            
+#>  [87] data.table_1.15.4          httr_1.4.7                
+#>  [89] htmlwidgets_1.6.4          uwot_0.2.2                
+#>  [91] pkgconfig_2.0.3            gtable_0.3.5              
+#>  [93] blob_1.2.4                 lmtest_0.9-40             
+#>  [95] htmltools_0.5.8.1          carData_3.0-5             
+#>  [97] dotCall64_1.1-1            scales_1.3.0              
+#>  [99] png_0.1-8                  knitr_1.47                
+#> [101] rstudioapi_0.16.0          reshape2_1.4.4            
+#> [103] nlme_3.1-167               cachem_1.1.0              
+#> [105] zoo_1.8-12                 stringr_1.5.1             
+#> [107] KernSmooth_2.23-26         parallel_4.4.3            
+#> [109] miniUI_0.1.1.1             shinycssloaders_1.0.0     
+#> [111] desc_1.4.3                 pillar_1.9.0              
+#> [113] grid_4.4.3                 vctrs_0.6.5               
+#> [115] RANN_2.6.1                 promises_1.3.0            
+#> [117] car_3.1-2                  xtable_1.8-4              
+#> [119] cluster_2.1.8              billboarder_0.4.1         
+#> [121] evaluate_0.24.0            cli_3.6.3                 
+#> [123] compiler_4.4.3             rlang_1.1.4               
+#> [125] future.apply_1.11.2        ggsignif_0.6.4            
+#> [127] labeling_0.4.3             plyr_1.8.9                
+#> [129] fs_1.6.4                   stringi_1.8.4             
+#> [131] viridisLite_0.4.2          deldir_2.0-4              
+#> [133] munsell_0.5.1              lazyeval_0.2.2            
+#> [135] spatstat.geom_3.2-9        Matrix_1.7-2              
+#> [137] RcppHNSW_0.6.0             scrypt_0.1.6              
+#> [139] patchwork_1.2.0            bit64_4.0.5               
+#> [141] future_1.33.2              shiny_1.8.1.1             
+#> [143] highr_0.11                 ROCR_1.0-11               
+#> [145] igraph_2.0.3               broom_1.0.6               
+#> [147] memoise_2.0.1              bslib_0.7.0               
+#> [149] bit_4.0.5
 ```
